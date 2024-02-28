@@ -1,10 +1,12 @@
 import React from "react";
 import styled from "styled-components";
-import { Link, NavLink } from "react-router-dom";
+import { Form, Link, NavLink, useRouteLoaderData } from "react-router-dom";
 
 import { Colors } from "../../constants/colors";
 
 const NavBar: React.FC = () => {
+  const token = useRouteLoaderData("root");
+
   return (
     <Header>
       <NavBox>
@@ -20,12 +22,16 @@ const NavBar: React.FC = () => {
             >
               suggestion
             </NavLink>
+          </NavLi>
+          <NavLi>
             <NavLink
               to="/jobs"
               className={({ isActive }) => (isActive ? "active" : undefined)}
             >
               find jobs
             </NavLink>
+          </NavLi>
+          <NavLi>
             <NavLink
               to="/saved_jobs"
               className={({ isActive }) => (isActive ? "active" : undefined)}
@@ -33,6 +39,23 @@ const NavBar: React.FC = () => {
               saved jobs
             </NavLink>
           </NavLi>
+
+          {!token ? (
+            <NavLi>
+              <NavLink to={"/auth?mode=login"}>Login</NavLink>
+            </NavLi>
+          ) : (
+            <>
+              <NavLi>
+                <NavLink to={"/profile"}>Profile</NavLink>
+              </NavLi>
+              <NavLi>
+                <Form action="/logout" method="post">
+                  <button>Logout</button>
+                </Form>
+              </NavLi>
+            </>
+          )}
         </NavListBox>
       </NavBox>
     </Header>
